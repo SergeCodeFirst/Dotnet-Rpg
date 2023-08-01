@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using System.Xml.Linq;
 using backend.Services.CharacterService;
+using backend.Dtos.Character;
+
+
 namespace backend.Controllers
 {
 	[ApiController]
@@ -55,7 +58,7 @@ namespace backend.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-		public async Task<ActionResult<ServiceResponse<IEnumerable<Character>>>> CreateCharacter([FromBody]Character newCharacter)
+		public async Task<ActionResult<ServiceResponse<IEnumerable<GetCharacterDto>>>> CreateCharacter([FromBody]AddCharacterDto newCharacter)
 		{
 			// If data sent is null
 			if (newCharacter == null)
@@ -67,6 +70,41 @@ namespace backend.Controllers
 		}
 
 
-	}
+		// UPDATE A CHARACTER
+		[HttpPut("update")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updatedChar)
+		{
+			var response = await _characterService.UpdateCharacter(updatedChar);
+
+            if (response.Success == false)
+			{
+				return NotFound(response);
+			}
+
+			return Ok(response);
+
+        }
+
+		// DELETE A CHARACTER
+		[HttpDelete("delete")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> DeleteCharacter(int characterId)
+		{
+			var response = await _characterService.DeleteCharacter(characterId);
+
+			if (response.Success == false)
+			{
+				return NotFound(response);
+			}
+
+            return NoContent();
+		}
+
+    }
 }
 

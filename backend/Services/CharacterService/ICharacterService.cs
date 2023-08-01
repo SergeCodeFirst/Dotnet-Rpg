@@ -8,7 +8,10 @@ namespace backend.Services.CharacterService
 	{
 		Task<ServiceResponse<IEnumerable<GetCharacterDto>>> GetAllCharacters();
 		Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int characterId);
-		Task<ServiceResponse<IEnumerable<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
-	}
+        Task<ServiceResponse<IEnumerable<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
+        Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedChar);
+        Task<ServiceResponse<GetCharacterDto>> DeleteCharacter(int characterId);
+
+    }
 }
 
