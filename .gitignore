@@ -28,7 +28,7 @@ yarn-error.log*
 # =================
 #     BACKEND
 #==================
-.appsettings.Development.json
+appsettings.Development.json
 # globs
 Makefile.in
 *.userprefs
