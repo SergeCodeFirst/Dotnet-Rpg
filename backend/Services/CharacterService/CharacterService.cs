@@ -4,6 +4,8 @@ using backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using backend.Dtos.Character;
 using AutoMapper;
+using backend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services.CharacterService
 {
@@ -17,10 +19,12 @@ namespace backend.Services.CharacterService
         };
 
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
 
 
@@ -41,11 +45,13 @@ namespace backend.Services.CharacterService
 
             // Covertign all the record into a Dto using Auto Mapper
             var CharactersDto = Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            var characterDB = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
 
             // Create a New ServiceRespond instance with the data
             var NewResponce = new ServiceResponse<IEnumerable<GetCharacterDto>>();
 
-            NewResponce.Data = CharactersDto;
+            //NewResponce.Data = CharactersDto;
+            NewResponce.Data = characterDB;
             //NewResponce.Success = true;
             NewResponce.Message = "These are all the Characters";
 
@@ -55,7 +61,7 @@ namespace backend.Services.CharacterService
         // GET CHARACTER BY ID
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int characterId)
         {
-            var charcter = Characters.FirstOrDefault(c => c.characterId == characterId);
+            var charcter = await _context.Characters.FirstOrDefaultAsync(c => c.characterId == characterId);
 
             //return charcter;
             //return Characters.FirstOrDefault(c => c.characterId == characterId)!; // Using null forgiving Character (!)
