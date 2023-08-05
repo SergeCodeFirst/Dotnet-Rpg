@@ -28,7 +28,6 @@ yarn-error.log*
 # =================
 #     BACKEND
 #==================
-appsettings.Development.json
 # globs
 Makefile.in
 *.userprefs
@@ -433,4 +432,5 @@ ASALocalRun/
 .mfractor/
 
 # Local History for Visual Studio
-.localhistory/
+backend/appsettings.Development.json
+.localhistory/backend/appsettings.Development.json
